@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FuturLab — TikTok Publishing</title>
+<meta name="description" content="FuturLab TikTok publishing workflow for authorized short-form content.">
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#111;background:#f7f7f8}body{margin:0}.wrap{max-width:900px;margin:40px auto;padding:0 20px}.card{background:#fff;border:1px solid #ddd;border-radius:16px;padding:22px;margin:18px 0;box-shadow:0 2px 10px #0000000b}h1{font-size:38px;margin:0 0 8px}h2{font-size:22px;margin-top:0}.muted{color:#666}.row{display:flex;gap:16px;align-items:center;flex-wrap:wrap}.profile img{width:64px;height:64px;border-radius:50%;object-fit:cover}.profile strong{font-size:20px}button{border:0;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;background:#111;color:#fff}button:disabled{opacity:.45;cursor:not-allowed}input[type=text],select,textarea{width:100%;box-sizing:border-box;padding:11px;border:1px solid #bbb;border-radius:9px;font:inherit}textarea{min-height:90px}.field{margin:16px 0}.field label{display:block;font-weight:700;margin-bottom:7px}.checks{display:grid;gap:10px}.notice{padding:12px 14px;background:#f2f4f7;border-radius:10px}.ok{color:#087a36}.err{color:#b42318}.hidden{display:none}.preview{max-width:320px;width:100%;border-radius:14px;background:#000}.commercial{padding:14px;border:1px solid #ddd;border-radius:10px;margin-top:10px}.topnav{display:flex;justify-content:space-between;gap:15px;align-items:center}.topnav a{color:#111}.status{white-space:pre-wrap;font-family:ui-monospace,Consolas,monospace;background:#111;color:#eee;padding:14px;border-radius:10px;overflow:auto}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topnav"><a href="/">← FuturLab</a><span class="muted">TikTok Sandbox Integration</span></div>
+  <div class="card">
+    <h1>Post to TikTok</h1>
+    <p class="muted">Connect your TikTok account, review the video and settings, then explicitly confirm publishing.</p>
+    <div id="connection"></div>
+  </div>
+
+  <div id="publisher" class="hidden">
+    <div class="card profile">
+      <h2>Connected TikTok account</h2>
+      <div class="row"><img id="avatar" alt="TikTok avatar"><div><strong id="displayName"></strong><div class="muted" id="creatorName"></div></div></div>
+    </div>
+
+    <div class="card">
+      <h2>1. Choose and preview video</h2>
+      <div class="field"><label for="video">Video file</label><input id="video" type="file" accept="video/mp4,video/quicktime,video/webm"></div>
+      <video id="preview" class="preview hidden" controls></video>
+      <p class="muted">For this sandbox demo, use a short video you own or are authorized to publish.</p>
+    </div>
+
+    <div class="card">
+      <h2>2. Post settings</h2>
+      <div class="field"><label for="title">Caption</label><textarea id="title" maxlength="2200" placeholder="Write an editable caption..."></textarea></div>
+      <div class="field"><label for="privacy">Privacy</label><select id="privacy"><option value="">Select privacy manually</option></select></div>
+      <div class="checks">
+        <label><input type="checkbox" id="allowComment"> Allow comments</label>
+        <label><input type="checkbox" id="allowDuet"> Allow Duet</label>
+        <label><input type="checkbox" id="allowStitch"> Allow Stitch</label>
+        <label><input type="checkbox" id="isAigc"> This video is AI-generated content</label>
+      </div>
+      <div class="commercial">
+        <label><input type="checkbox" id="commercial"> This content promotes a brand, product, service or myself</label>
+        <div id="commercialOptions" class="hidden" style="margin-top:10px">
+          <label><input type="checkbox" id="yourBrand"> Your brand / own business</label><br>
+          <label><input type="checkbox" id="brandedContent"> Branded content / third party</label>
+          <div class="muted" id="commercialNote" style="margin-top:8px"></div>
+        </div>
+      </div>
+      <div class="notice" style="margin-top:16px">TikTok requires the creator to review all settings and explicitly consent before upload.</div>
+    </div>
+
+    <div class="card">
+      <h2>3. Confirm and publish</h2>
+      <label><input type="checkbox" id="rights"> I confirm that I own or am authorized to publish this video.</label><br><br>
+      <label><input type="checkbox" id="music"> By posting, you agree to TikTok's Music Usage Confirmation.</label>
+      <div style="margin-top:18px"><button id="post" disabled>Post to TikTok</button></div>
+      <p class="muted">Publishing may take a few minutes to process and become visible on the TikTok profile.</p>
+      <div id="result" class="status hidden"></div>
+    </div>
+  </div>
+</div>
+<script>
+const API='https://auth.futurlabmedia.com';
+const $=id=>document.getElementById(id);
+let creatorInfo=null;
+let currentPublishId=null;
+
+function setConnection(html){$('connection').innerHTML=html}
+function showError(message){setConnection(`<p class="err">${message}</p><p><button onclick="location.href='${API}/tiktok/login'">Connect TikTok</button></p>`)}
+async function api(path,options={}){
+  const r=await fetch(API+path,{...options,credentials:'include'});
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok) throw new Error(data.error||`Request failed (${r.status})`);
+  return data;
+}
+function bool(v){return !!v}
+function updatePostButton(){
+  const commercialOk=!$('commercial').checked || $('yourBrand').checked || $('brandedContent').checked;
+  const brandedPrivateConflict=$('brandedContent').checked && $('privacy').value==='SELF_ONLY';
+  $('post').disabled=!$('video').files[0] || !$('privacy').value || !$('rights').checked || !$('music').checked || !commercialOk || brandedPrivateConflict;
+  $('commercialNote').textContent=brandedPrivateConflict?'Branded content cannot use Only me privacy.':'';
+}
+function renderCreatorOptions(info){
+  creatorInfo=info;
+  $('creatorName').textContent=info.creator_username?`@${info.creator_username}`:'';
+  $('privacy').innerHTML='<option value="">Select privacy manually</option>';
+  (info.privacy_level_options||[]).forEach(v=>{
+    const o=document.createElement('option');o.value=v;o.textContent={PUBLIC_TO_EVERYONE:'Everyone',MUTUAL_FOLLOW_FRIENDS:'Friends',FOLLOWER_OF_CREATOR:'Followers',SELF_ONLY:'Only me'}[v]||v;$('privacy').appendChild(o);
+  });
+  $('allowComment').disabled=bool(info.comment_disabled);
+  $('allowDuet').disabled=bool(info.duet_disabled);
+  $('allowStitch').disabled=bool(info.stitch_disabled);
+  $('allowComment').checked=false;$('allowDuet').checked=false;$('allowStitch').checked=false;
+}
+async function load(){
+  try{
+    const status=await api('/tiktok/status');
+    if(!status.connected){showError('TikTok is not connected yet.');return}
+    setConnection('<p class="ok">✓ TikTok connected</p>');
+    const [profile,creator]=await Promise.all([api('/tiktok/profile'),api('/tiktok/creator-info')]);
+    const user=profile.data&&profile.data.user?profile.data.user:{};
+    $('avatar').src=user.avatar_url||'';
+    $('displayName').textContent=user.display_name||'Connected creator';
+    renderCreatorOptions(creator.data||{});
+    $('publisher').classList.remove('hidden');
+  }catch(e){showError(e.message)}
+}
+$('video').addEventListener('change',()=>{
+  const f=$('video').files[0];if(!f){$('preview').classList.add('hidden');updatePostButton();return}
+  $('preview').src=URL.createObjectURL(f);$('preview').classList.remove('hidden');updatePostButton();
+});
+['privacy','rights','music','yourBrand','brandedContent'].forEach(id=>$(id).addEventListener('change',updatePostButton));
+$('commercial').addEventListener('change',()=>{$('commercialOptions').classList.toggle('hidden',!$('commercial').checked);if(!$('commercial').checked){$('yourBrand').checked=false;$('brandedContent').checked=false}updatePostButton()});
+$('post').addEventListener('click',async()=>{
+  $('post').disabled=true;$('result').classList.remove('hidden');$('result').textContent='Uploading to TikTok...';
+  try{
+    const fd=new FormData();
+    fd.append('video',$('video').files[0]);fd.append('title',$('title').value);fd.append('privacy_level',$('privacy').value);
+    fd.append('allow_comment',$('allowComment').checked);fd.append('allow_duet',$('allowDuet').checked);fd.append('allow_stitch',$('allowStitch').checked);
+    fd.append('is_aigc',$('isAigc').checked);fd.append('commercial_content',$('commercial').checked);fd.append('your_brand',$('yourBrand').checked);fd.append('branded_content',$('brandedContent').checked);fd.append('music_confirmation','accepted');
+    const init=await api('/tiktok/post-file',{method:'POST',body:fd});currentPublishId=init.publish_id;
+    $('result').textContent=`Upload accepted.\npublish_id: ${currentPublishId}\nChecking processing status...`;
+    pollStatus();
+  }catch(e){$('result').textContent='Error: '+e.message;updatePostButton()}
+});
+async function pollStatus(){
+  if(!currentPublishId)return;
+  try{
+    const r=await api('/tiktok/post-status',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({publish_id:currentPublishId})});
+    const d=r.data||{};$('result').textContent=`publish_id: ${currentPublishId}\nStatus: ${d.status||'UNKNOWN'}${d.fail_reason?`\nReason: ${d.fail_reason}`:''}`;
+    if(['PUBLISH_COMPLETE','FAILED'].includes(d.status)){updatePostButton();return}
+    setTimeout(pollStatus,2500);
+  }catch(e){$('result').textContent+='\nStatus check error: '+e.message;updatePostButton()}
+}
+load();
+</script>
+</body>
+</html>
