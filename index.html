@@ -1,82 +1,88 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FuturLab — Short-form content workflows</title>
-<meta name="description" content="FuturLab helps creators prepare, review and publish authorized short-form digital content through creator-controlled workflows.">
-<style>
-:root{font-family:Arial,Helvetica,sans-serif;color:#111;background:#f6f7f9}*{box-sizing:border-box}body{margin:0;line-height:1.6}.wrap{max-width:1040px;margin:auto;padding:0 24px}header{background:#fff;border-bottom:1px solid #e5e7eb}header .wrap{display:flex;justify-content:space-between;align-items:center;padding-top:20px;padding-bottom:20px}.brand{font-size:27px;font-weight:800}.links a{margin-left:22px;color:#111;text-decoration:none}.hero{padding:78px 0 55px;background:#fff}.hero h1{font-size:52px;line-height:1.08;max-width:800px;margin:0 0 20px}.hero p{font-size:20px;color:#4b5563;max-width:760px}.cta{display:inline-block;margin-top:16px;padding:13px 19px;border-radius:10px;background:#111;color:#fff;text-decoration:none;font-weight:700}.section{padding:52px 0}.section h2{font-size:30px;margin:0 0 22px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{background:#fff;border:1px solid #e5e7eb;border-radius:14px;padding:22px}.card h3{margin-top:0}.steps{display:grid;gap:14px}.step{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px 18px}.policy{background:#fff;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb}.platforms{margin-top:25px;padding:18px;border:1px solid #e5e7eb;border-radius:12px;background:#f9fafb}.platforms strong{display:block;margin-bottom:6px}footer{background:#fff;padding:32px 0}footer a{color:#111;margin-right:20px}.muted{color:#6b7280}@media(max-width:760px){.grid{grid-template-columns:1fr}.hero h1{font-size:40px}.links{display:none}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FuturLab — Authorized short-form publishing</title>
+  <meta name="description" content="FuturLab helps creators prepare, review and publish authorized short-form content through official platform integrations.">
+  <link rel="icon" type="image/png" href="/futurlab-logo.png">
+  <link rel="apple-touch-icon" href="/futurlab-logo.png">
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div class="brand">FuturLab</div>
-    <nav class="links">
-      <a href="#how">How it works</a>
-      <a href="#rights">Authorized content</a>
-      <a href="/terms.html">Terms of Service</a>
-      <a href="/privacy.html">Privacy Policy</a>
-    </nav>
-  </div>
-</header>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand-link" href="/" aria-label="FuturLab home"><img class="brand-logo" src="/futurlab-logo.png" alt="FuturLab"></a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="/app.html">Publishing app</a>
+        <a href="#workflow">How it works</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/privacy.html">Privacy Policy</a>
+      </nav>
+    </div>
+  </header>
 
-<main>
-  <section class="hero">
-    <div class="wrap">
-      <h1>Creator-controlled workflows for short-form video.</h1>
-      <p>FuturLab helps creators prepare, review and publish short-form videos about technology, science, innovation and the future. Publishing actions remain under the creator's control and are limited to owned, licensed, campaign-provided or otherwise authorized content.</p>
-      <a class="cta" href="/tiktok-demo.html">Open TikTok publishing workflow</a>
-      <div class="platforms">
-        <strong>Official platform integrations</strong>
-        <span>YouTube API Services · Instagram · Facebook · TikTok</span><br>
-        <span class="muted">YouTube connections use Google's OAuth authorization and YouTube Data API Services. See our <a href="/privacy.html">Privacy Policy</a> and <a href="/terms.html">Terms of Service</a>.</span>
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <p class="eyebrow">Creator-controlled publishing</p>
+          <h1>Prepare, review and publish authorized short-form video.</h1>
+          <p class="hero-copy">FuturLab connects creators to official social-platform publishing workflows. The creator chooses the content, account, caption, privacy and publishing settings before a post is sent.</p>
+          <div class="actions">
+            <a class="button button-primary" href="/app.html">Open the publishing app</a>
+            <a class="button button-secondary" href="/privacy.html">Review data practices</a>
+          </div>
+        </div>
+        <aside class="hero-panel" aria-label="Publishing workflow summary">
+          <h2>Publishing workflow</h2>
+          <div class="mini-steps">
+            <div class="mini-step"><span class="step-number">1</span><div><strong>Connect</strong><span>Authorize an account through the platform's official OAuth flow.</span></div></div>
+            <div class="mini-step"><span class="step-number">2</span><div><strong>Review</strong><span>Choose an authorized video and confirm its metadata and settings.</span></div></div>
+            <div class="mini-step"><span class="step-number">3</span><div><strong>Publish</strong><span>Send the post or draft only after explicit creator confirmation.</span></div></div>
+            <div class="mini-step"><span class="step-number">4</span><div><strong>Track</strong><span>Monitor permitted processing status and performance information.</span></div></div>
+          </div>
+        </aside>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section">
-    <div class="wrap">
-      <h2>What FuturLab provides</h2>
-      <div class="grid">
-        <div class="card"><h3>Video preparation</h3><p>Short-form content is organized for platform-ready publishing workflows, including review of the video and its publishing metadata.</p></div>
-        <div class="card"><h3>Creator review</h3><p>Creators can preview selected content and configure the accounts, platforms, captions, visibility and schedule used by an authorized publishing workflow.</p></div>
-        <div class="card"><h3>Authorized publishing</h3><p>Publishing happens only within a workflow deliberately configured and authorized by the connected account owner.</p></div>
+    <section class="section section-white" id="workflow">
+      <div class="container">
+        <h2>A working service for authorized creators</h2>
+        <p class="section-intro">FuturLab provides the actual publishing interface, account authorization and processing-status workflow. It does not provide artificial engagement or redistribute content without permission.</p>
+        <div class="grid-3">
+          <article class="card"><h3>Creator authorization</h3><p>Each connected account is authorized through the platform's official sign-in and permission flow. Access can be revoked at any time.</p></article>
+          <article class="card"><h3>Content control</h3><p>Creators select content they own, license or are otherwise authorized to use and review publishing settings before submission.</p></article>
+          <article class="card"><h3>Official APIs</h3><p>Publishing and permitted status functions use official platform integrations rather than scraping, fake engagement or rule evasion.</p></article>
+        </div>
+        <div class="platform-list" aria-label="Supported platform integrations">
+          <span>TikTok Content Posting API</span>
+          <span>YouTube API Services</span>
+          <span>Instagram</span>
+          <span>Facebook</span>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section" id="how">
-    <div class="wrap">
-      <h2>How the publishing workflow works</h2>
-      <div class="steps">
-        <div class="step"><strong>1. Connect an account.</strong> The creator authorizes FuturLab through the platform's official authentication flow.</div>
-        <div class="step"><strong>2. Choose or approve authorized content.</strong> FuturLab only prepares content that is owned, licensed, campaign-provided or otherwise authorized.</div>
-        <div class="step"><strong>3. Configure publishing.</strong> The creator chooses the permitted platform accounts and can configure a specific post or an ongoing scheduled workflow.</div>
-        <div class="step"><strong>4. Publish within that authorization.</strong> FuturLab only performs actions covered by the creator's configured workflow and platform permissions.</div>
-        <div class="step"><strong>5. Track processing.</strong> FuturLab records platform processing status and permitted performance metrics so the creator can monitor the workflow.</div>
+    <section class="section">
+      <div class="container">
+        <h2>Authorized content only</h2>
+        <p class="section-intro">Users must own their content or have the necessary license, campaign authorization or other permission. FuturLab requires a rights confirmation before publishing and supports platform-required commercial-content and AI-generated-content disclosures.</p>
+        <a class="button button-primary" href="/app.html">Go to publishing</a>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <section class="section policy" id="rights">
-    <div class="wrap">
-      <h2>Authorized content only</h2>
-      <p>FuturLab is designed for content that the creator owns or has permission to use. We do not provide fake engagement, artificial views or unauthorized redistribution. Creators are responsible for confirming that they have the necessary rights before submitting content for publishing.</p>
-      <p class="muted">For questions about the service or data handling, contact clipsfabricc@gmail.com.</p>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand"><img src="/futurlab-logo.png" alt="FuturLab"><span>Authorized short-form publishing workflows</span></div>
+      <nav class="footer-links" aria-label="Legal and service links">
+        <a href="/app.html">Publishing app</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="mailto:clipsfabricc@gmail.com">Contact</a>
+      </nav>
     </div>
-  </section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <strong>FuturLab</strong><br><br>
-    <a href="/terms.html">Terms of Service</a>
-    <a href="/privacy.html">Privacy Policy</a>
-    <a href="/tiktok-demo.html">TikTok Publishing</a>
-    <p class="muted">Contact: clipsfabricc@gmail.com</p>
-  </div>
-</footer>
+  </footer>
 </body>
 </html>
